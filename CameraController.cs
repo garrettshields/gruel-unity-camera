@@ -7,34 +7,37 @@ namespace Gruel.Camera {
 	public class CameraController : MonoBehaviour {
 		
 #region Properties
-		public static CameraController Instance { get; private set; }
-		
-		public UnityEngine.Camera Camera {
-			get => _camera;
-		}
+		public UnityEngine.Camera Camera => _camera;
 
-		public float OrthoSize {
-			get => _camera.orthographicSize;
-		}
-	
-		public Vector3 CameraPosition {
-			get => _camera.transform.position;
+		public float OrthoSize => _camera.orthographicSize;
+
+		public Vector3 CameraPosition => _camera.transform.position;
+
+		public bool Active {
+			get => _active;
+			set {
+				_active = value;
+				_camera.enabled = _active;
+			}
 		}
 #endregion Properties
 
 #region Fields
 		[Header("Camera")]
 		[SerializeField] private UnityEngine.Camera _camera;
+		[SerializeField] private GameObject _cameraGameObject;
 		
 		[Header("Traits")]
 		[FormerlySerializedAs("_cameraTraits")] [SerializeField] private CameraTrait[] _traitComponents;
+
+		private bool _active = true;
 
 		private List<CameraTrait> _traits;
 #endregion Fields
 
 #region Public Methods
 		public void SetPosition(Vector3 position) {
-			Debug.Log($"CameraController.SetPosition: {position}");
+			Debug.Log($"CameraController.SetPosition: {position.ToString()}");
 		
 			transform.position = position;
 		}
@@ -68,14 +71,6 @@ namespace Gruel.Camera {
 
 #region Private Methods
 		private void Awake() {
-			// Setup instance.
-			if (Instance != null) {
-				Debug.LogError("CameraController: There is already an instance of CameraController!");
-				Destroy(gameObject);
-			} else {
-				Instance = this;
-			}
-			
 			// Add initial component traits.
 			_traits = new List<CameraTrait>();
 
