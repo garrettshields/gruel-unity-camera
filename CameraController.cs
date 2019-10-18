@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Gruel.Camera {
 	public class CameraController : MonoBehaviour {
@@ -17,7 +16,7 @@ namespace Gruel.Camera {
 			get => _active;
 			set {
 				_active = value;
-				_camera.enabled = _active;
+				_cameraGameObject.SetActive(_active);
 			}
 		}
 #endregion Properties
@@ -28,7 +27,7 @@ namespace Gruel.Camera {
 		[SerializeField] private GameObject _cameraGameObject;
 		
 		[Header("Traits")]
-		[FormerlySerializedAs("_cameraTraits")] [SerializeField] private CameraTrait[] _traitComponents;
+		[SerializeField] private CameraTrait[] _traitComponents;
 
 		private bool _active = true;
 
